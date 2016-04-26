@@ -1,0 +1,1 @@
+include ':genericadapter', ':genericrecycleradapter', ':genericadaptersample'
