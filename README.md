@@ -1,0 +1,2 @@
+# GenericAdapter
+GenericAdapter是一個泛用型Adapter於ListView和RecyclerView
