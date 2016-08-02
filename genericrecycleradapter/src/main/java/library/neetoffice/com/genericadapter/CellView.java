@@ -15,12 +15,19 @@ public abstract class CellView<E> extends FrameLayout {
     public static final int WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
     public static final int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT;
     protected E data;
+    boolean recyclable = true;
     private GenericAdapterInterface<E> genericAdapter;
 
     public CellView(Context context) {
         super(context);
         setLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
     }
+
+    public CellView(Context context, boolean recyclable) {
+        this(context);
+        this.recyclable = recyclable;
+    }
+
 
     public void setLayoutParams(int width, int height) {
         setLayoutParams(new ViewGroup.LayoutParams(width, height));

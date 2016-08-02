@@ -7,8 +7,10 @@ import android.support.v7.widget.RecyclerView;
  */
 public class ViewWrapper extends RecyclerView.ViewHolder {
     CellView view;
+
     public ViewWrapper(CellView itemView) {
         super(itemView);
+        setIsRecyclable(false);
         view = itemView;
     }
 

@@ -17,6 +17,8 @@ import library.neetoffice.com.genericadapter.base.GenericAdapterInterface;
  * Created by Deo-chainmeans on 2015/6/5.
  */
 public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<ViewWrapper> implements GenericAdapterInterface<E> {
+    protected ArrayList<E> originalItems = new ArrayList<>();
+    protected ArrayList<Integer> indexs = new ArrayList<>();
     private Context context;
     private Filter<E> filter = new Filter<E>() {
 
@@ -25,8 +27,7 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
             return true;
         }
     };
-    protected ArrayList<E> originalItems = new ArrayList<>();
-    protected ArrayList<Integer> indexs = new ArrayList<>();
+    private Comparator<E> sort;
     private final Comparator<Integer> indexSort = new Comparator<Integer>() {
         @Override
         public int compare(Integer lhs, Integer rhs) {
@@ -41,7 +42,6 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
             }
         }
     };
-    private Comparator<E> sort;
 
     public GenericRecyclerAdapter(Context context, Collection<E> items) {
         this.context = context;
@@ -55,17 +55,20 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
 
     @Override
     public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
-        CellView<E> cellView = onCreateItemView(parent, viewType);
+        final CellView<E> cellView = onCreateItemView(parent, viewType);
         cellView.setGenericAdapter(this);
-        return new ViewWrapper(cellView);
+        final ViewWrapper viewWrapper = new ViewWrapper(cellView);
+        viewWrapper.setIsRecyclable(cellView.recyclable);
+        return viewWrapper;
     }
 
     @Override
     public void onBindViewHolder(ViewWrapper viewWrapper, int position) {
         if (indexs.size() > position) {
             final E e = getItem(position);
-            viewWrapper.getView().onBindViewHolder(e);
-            viewWrapper.getView().bind(e);
+            final CellView cellView = viewWrapper.getView();
+            cellView.onBindViewHolder(e);
+            cellView.bind(e);
         }
         if (getItemClickable(position)) {
             viewWrapper.getView().onItemClickable(true);
