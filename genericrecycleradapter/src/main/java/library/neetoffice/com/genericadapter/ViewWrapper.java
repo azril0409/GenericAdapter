@@ -10,7 +10,6 @@ public class ViewWrapper extends RecyclerView.ViewHolder {
 
     public ViewWrapper(CellView itemView) {
         super(itemView);
-        setIsRecyclable(false);
         view = itemView;
     }
 

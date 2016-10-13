@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 24
+    buildToolsVersion '24.0.2'
 
     defaultConfig {
-        minSdkVersion 7
-        targetSdkVersion 23
+        minSdkVersion 9
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -15,7 +15,7 @@ android {
         }
     }
 }
-def libname = 'GenericRecyclerAdapter_106.jar'
+def libname = 'GenericRecyclerAdapter_107.jar'
 task clearAar(type: Delete) {
     delete '../librarys/genericrecycleradapter/'
 }
@@ -29,6 +29,6 @@ task makeAar(type: Copy) {
 makeAar.dependsOn(clearAar, build)
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'com.android.support:recyclerview-v7:24.+'
     compile project(':genericadapter')
 }

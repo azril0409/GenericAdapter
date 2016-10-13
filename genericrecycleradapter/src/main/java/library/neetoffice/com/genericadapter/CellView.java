@@ -14,20 +14,21 @@ import library.neetoffice.com.genericadapter.base.GenericAdapterInterface;
 public abstract class CellView<E> extends FrameLayout {
     public static final int WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
     public static final int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT;
+    final boolean recyclable;
     protected E data;
-    boolean recyclable = true;
     private GenericAdapterInterface<E> genericAdapter;
 
     public CellView(Context context) {
         super(context);
         setLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        recyclable = true;
     }
 
     public CellView(Context context, boolean recyclable) {
-        this(context);
+        super(context);
+        setLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
         this.recyclable = recyclable;
     }
-
 
     public void setLayoutParams(int width, int height) {
         setLayoutParams(new ViewGroup.LayoutParams(width, height));
@@ -52,15 +53,15 @@ public abstract class CellView<E> extends FrameLayout {
         this.genericAdapter = genericAdapter;
     }
 
-    public final E getData() {
-        return data;
-    }
-
     final void onBindViewHolder(E data) {
         this.data = data;
     }
 
     public void bind(E e) {
+    }
+
+    public final E getData() {
+        return data;
     }
 
     public String getString(@StringRes int resId) {
@@ -69,6 +70,10 @@ public abstract class CellView<E> extends FrameLayout {
 
     public String getString(@StringRes int resId, Object... formatArgs) {
         return getContext().getString(resId, formatArgs);
+    }
+
+    public final boolean isRecyclable() {
+        return recyclable;
     }
 
     private class Listener implements OnClickListener {

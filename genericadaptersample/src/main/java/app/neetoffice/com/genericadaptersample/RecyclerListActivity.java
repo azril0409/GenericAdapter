@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import java.util.Comparator;
 
 import library.neetoffice.com.genericadapter.NormalHeaderDecoration;
 import library.neetoffice.com.genericadapter.StickyHeaderAdapter;
-import library.neetoffice.com.genericadapter.StickyHeaderDecoration;
 import library.neetoffice.com.genericadapter.base.Filter;
 import library.neetoffice.com.genericadapter.CellView;
 import library.neetoffice.com.genericadapter.GenericRecyclerAdapter;

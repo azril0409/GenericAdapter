@@ -5,15 +5,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 /**
  * Created by Deo on 2016/3/17.
  */
 public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends GenericRecyclerAdapter<E> {
-    private static final int HEADER = -1;
-    private static final int ITEM = 0;
+    protected static final int HEADER = -1;
+    protected static final int ITEM = 0;
     private ArrayList<Header> headerItems = new ArrayList<>();
 
     public GenericStickyHeaderRecyclerAdapter(Context context, Collection<E> items) {
@@ -38,22 +37,30 @@ public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends Gene
 
 
     @Override
-    public int getItemViewType(int position) {
+    public final int getItemViewType(int position) {
         final int index = indexs.get(position);
         if (index >= 0) {
-            return ITEM;
+            final int type = getCellViewType(position);
+            if (type == HEADER) {
+                throw new RuntimeException("getCellViewType can not return " + HEADER);
+            }
+            return type;
         }
         return HEADER;
     }
 
+    public int getCellViewType(int position) {
+        return ITEM;
+    }
+
     @Override
     public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM) {
+        if (viewType == HEADER) {
+            return new ViewWrapper(onCreateHeaderViewHolder(parent));
+        } else {
             CellView<E> cellView = onCreateItemView(parent, viewType);
             cellView.setGenericAdapter(this);
             return new ViewWrapper(cellView);
-        } else {
-            return new ViewWrapper(onCreateHeaderViewHolder(parent));
         }
     }
 
