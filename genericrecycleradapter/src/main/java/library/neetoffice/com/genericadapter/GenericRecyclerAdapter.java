@@ -176,14 +176,11 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
 
     @Override
     public final void refresh() {
-        for (int i = 0; i < indexs.size(); i++) {
-            notifyItemRemoved(i);
-        }
         onRefreshIndexs();
-        notifyDataSetChanged();
     }
 
     protected void onRefreshIndexs() {
+        notifyItemRangeRemoved(0,indexs.size());
         indexs.clear();
         for (int index = 0; index < originalItems.size(); index++) {
             final E originalItem = originalItems.get(index);
@@ -194,6 +191,7 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
             }
         }
         Collections.sort(indexs, indexSort);
+        notifyItemRangeInserted(0, indexs.size());
     }
 
     @Override
