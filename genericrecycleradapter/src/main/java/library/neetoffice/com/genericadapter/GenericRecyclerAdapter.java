@@ -12,40 +12,19 @@ import java.util.List;
 
 import library.neetoffice.com.genericadapter.base.Filter;
 import library.neetoffice.com.genericadapter.base.GenericAdapterInterface;
+import library.neetoffice.com.genericadapter.base.ItemManager;
 
 /**
  * Created by Deo-chainmeans on 2015/6/5.
  */
 public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<ViewWrapper> implements GenericAdapterInterface<E> {
-    protected ArrayList<E> originalItems = new ArrayList<>();
-    protected ArrayList<Integer> indexs = new ArrayList<>();
-    private Context context;
-    private Filter<E> filter = new Filter<E>() {
-
-        @Override
-        public boolean filter(E item) {
-            return true;
-        }
-    };
-    private Comparator<E> sort;
-    private final Comparator<Integer> indexSort = new Comparator<Integer>() {
-        @Override
-        public int compare(Integer lhs, Integer rhs) {
-            if (sort != null) {
-                synchronized (sort) {
-                    final E elhs = originalItems.get(lhs);
-                    final E erhs = originalItems.get(rhs);
-                    return sort.compare(elhs, erhs);
-                }
-            } else {
-                return lhs - rhs;
-            }
-        }
-    };
+    protected static final int NODATA = Integer.MIN_VALUE;
+    private final Context context;
+    protected final ItemManager<E> manager;
 
     public GenericRecyclerAdapter(Context context, Collection<E> items) {
         this.context = context;
-        originalItems = new ArrayList<>(items);
+        manager = new ItemManager<E>(items);
         refresh();
     }
 
@@ -55,20 +34,46 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
 
     @Override
     public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
-        final CellView<E> cellView = onCreateItemView(parent, viewType);
-        cellView.setGenericAdapter(this);
-        final ViewWrapper viewWrapper = new ViewWrapper(cellView);
-        viewWrapper.setIsRecyclable(cellView.recyclable);
-        return viewWrapper;
+        if (viewType == NODATA) {
+            final CellView<?> cellView = onCreateNoDateView(parent);
+            final ViewWrapper viewWrapper = new ViewWrapper(cellView);
+            return viewWrapper;
+        } else {
+            final CellView<?> cellView = onCreateItemView(parent, viewType);
+            cellView.setGenericAdapter(this);
+            final ViewWrapper viewWrapper = new ViewWrapper(cellView);
+            viewWrapper.setIsRecyclable(cellView.recyclable);
+            return viewWrapper;
+        }
+    }
+
+    @Override
+    public final int getItemViewType(int position) {
+        if (manager.getIndexCount() > position) {
+            return onGetItemViewType(position);
+        }
+        return NODATA;
+    }
+
+    public int onGetItemViewType(int position) {
+        return position;
     }
 
     @Override
     public void onBindViewHolder(ViewWrapper viewWrapper, int position) {
-        if (indexs.size() > position) {
+        if (getItemViewType(position) != NODATA) {
             final E e = getItem(position);
             final CellView cellView = viewWrapper.getView();
-            cellView.onBindViewHolder(e);
-            cellView.bind(e);
+            if (cellView != null) {
+                cellView.onBindViewHolder(e);
+                cellView.bind(e);
+            }
+        } else {
+            final CellView cellView = viewWrapper.getView();
+            if (cellView != null) {
+                cellView.onBindViewHolder(null);
+                cellView.bind(null);
+            }
         }
         if (getItemClickable(position)) {
             viewWrapper.getView().onItemClickable(true);
@@ -77,7 +82,11 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
         }
     }
 
-    public abstract CellView<E> onCreateItemView(ViewGroup parent, int viewType);
+    public abstract CellView<?> onCreateItemView(ViewGroup parent, int viewType);
+
+    public CellView<?> onCreateNoDateView(ViewGroup parent) {
+        return new DefaultNoDateView(getContext());
+    }
 
     public boolean getItemClickable(int position) {
         return false;
@@ -85,122 +94,81 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
 
     @Override
     public int getItemCount() {
-        return indexs.size();
+        return manager.getItemCount();
     }
 
     @Override
     public final void addAll(Collection<E> items) {
-        try {
-            final int originalSize = originalItems.size();
-            final boolean b = originalItems.addAll(items);
-            for (int index = originalSize; index < originalItems.size(); index++) {
-                refresh();
-            }
-        } catch (Exception e) {
-        } finally {
-        }
+        manager.addAll(items);
+        refresh();
     }
 
     @Override
     public final void setAll(Collection<E> items) {
-        try {
-            originalItems.clear();
-            originalItems.addAll(items);
-            refresh();
-        } catch (Exception e) {
-        } finally {
-        }
+        manager.setAll(items);
+        refresh();
     }
 
     @Override
     public final void add(E item) {
-        try {
-            final boolean b = originalItems.add(item);
-            if (b && filter.filter(item)) {
-                refresh();
-            }
-        } catch (Exception e) {
-        } finally {
-        }
+        manager.add(item);
+        refresh();
     }
 
     @Override
     public final void set(int index, E item) {
-        try {
-            originalItems.set(index, item);
-            refresh();
-        } catch (Exception e) {
-        } finally {
-        }
+        manager.set(index, item);
+        refresh();
     }
 
     @Override
     public final void remove(E item) {
-        try {
-            originalItems.remove(item);
-            refresh();
-        } catch (Exception e) {
-        } finally {
-        }
+        manager.remove(item);
+        refresh();
     }
 
     @Override
     public final E remove(int position) {
-        try {
-            E e = originalItems.remove(position);
-            refresh();
-            return e;
-        } catch (Exception e) {
-        } finally {
-        }
-        return null;
+        final E e = manager.remove(position);
+        refresh();
+        return e;
     }
 
     @Override
     public final void clear() {
-        originalItems.clear();
+        manager.clear();
         refresh();
     }
 
     @Override
     public final void setFilter(Filter<E> filter) {
-        this.filter = filter;
+        manager.setFilter(filter);
         refresh();
     }
 
     @Override
     public final void setSort(Comparator<E> sort) {
-        this.sort = sort;
+        manager.setSort(sort);
         refresh();
     }
 
     @Override
-    public final void refresh() {
-        onRefreshIndexs();
-    }
-
-    protected void onRefreshIndexs() {
-        notifyItemRangeRemoved(0,indexs.size());
-        indexs.clear();
-        for (int index = 0; index < originalItems.size(); index++) {
-            final E originalItem = originalItems.get(index);
-            if (filter.filter(originalItem)) {
-                if (!indexs.contains(index)) {
-                    indexs.add(index);
-                }
-            }
+    public void refresh() {
+        if (manager.getIndexCount() == 0) {
+            notifyItemRemoved(0);
         }
-        Collections.sort(indexs, indexSort);
-        notifyItemRangeInserted(0, indexs.size());
+        notifyItemRangeRemoved(0, manager.getIndexCount());
+        manager.refresh();
+        notifyItemRangeInserted(0, manager.getIndexCount());
     }
 
     @Override
     public final List<E> getItems() {
-        return originalItems;
+        return manager.getItems();
     }
 
     @Override
     public E getItem(int position) {
-        return originalItems.get(indexs.get(position));
+        return manager.getItem(position);
     }
 }

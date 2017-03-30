@@ -10,4 +10,8 @@
         android:id="@+id/asc"
         android:title="逆序"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/add"
+        android:title="加入"
+        app:showAsAction="ifRoom" />
 </menu>

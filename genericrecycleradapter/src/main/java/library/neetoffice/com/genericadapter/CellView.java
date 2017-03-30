@@ -49,7 +49,7 @@ public abstract class CellView<E> extends FrameLayout {
         return genericAdapter;
     }
 
-    final void setGenericAdapter(GenericAdapterInterface<E> genericAdapter) {
+    final void setGenericAdapter(GenericAdapterInterface genericAdapter) {
         this.genericAdapter = genericAdapter;
     }
 

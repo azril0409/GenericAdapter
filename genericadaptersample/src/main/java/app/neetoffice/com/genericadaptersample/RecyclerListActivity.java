@@ -12,13 +12,16 @@ import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
+import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 import library.neetoffice.com.genericadapter.NormalHeaderDecoration;
 import library.neetoffice.com.genericadapter.StickyHeaderAdapter;
 import library.neetoffice.com.genericadapter.base.Filter;
@@ -58,9 +61,10 @@ public class RecyclerListActivity extends AppCompatActivity implements Toolbar.O
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         toolbar.inflateMenu(R.menu.menu_list);
         toolbar.setOnMenuItemClickListener(this);
-        adapter = new Adapter(this, Arrays.asList(getResources().getStringArray(R.array.items)));
+        adapter = new Adapter(this, new ArrayList<String>());
         adapter.setFilter(this);
         recyclerView.setLayoutManager(getLayoutManager());
+        recyclerView.setItemAnimator(new FadeInUpAnimator());
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new NormalHeaderDecoration<String>(adapter));
         editText.addTextChangedListener(this);
@@ -76,6 +80,11 @@ public class RecyclerListActivity extends AppCompatActivity implements Toolbar.O
         } else if (item.getItemId() == R.id.asc) {
             if (adapter != null) {
                 adapter.setSort(asc);
+                return true;
+            }
+        }else if (item.getItemId() == R.id.add) {
+            if (adapter != null) {
+                adapter.setAll(Arrays.asList(getResources().getStringArray(R.array.items)));
                 return true;
             }
         }
@@ -100,7 +109,7 @@ public class RecyclerListActivity extends AppCompatActivity implements Toolbar.O
 
     @Override
     public boolean filter(String item) {
-        if (text == null) {
+        if (text == null||text.isEmpty()) {
             return true;
         }
         return item.contains(text);
@@ -135,7 +144,10 @@ public class RecyclerListActivity extends AppCompatActivity implements Toolbar.O
 
         @Override
         public long getHeaderId(int position) {
-            return getItem(position).charAt(0);
+            if(getItem(position)!=null){
+                return getItem(position).charAt(0);
+            }
+            return 0;
         }
 
         @Override

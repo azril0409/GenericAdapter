@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
+import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 import library.neetoffice.com.genericadapter.CellView;
 import library.neetoffice.com.genericadapter.GenericStickyHeaderRecyclerAdapter;
 import library.neetoffice.com.genericadapter.base.Filter;
@@ -51,9 +53,10 @@ public class RecyclerHeaderGridActivity extends AppCompatActivity implements Too
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         toolbar.inflateMenu(R.menu.menu_list);
         toolbar.setOnMenuItemClickListener(this);
-        adapter = new Adapter(this, Arrays.asList(getResources().getStringArray(R.array.items)));
+        adapter = new Adapter(this, new ArrayList<String>());
         adapter.setFilter(this);
         recyclerView.setLayoutManager(adapter.getGridLayoutManager(2, GridLayoutManager.VERTICAL, false));
+        recyclerView.setItemAnimator(new FadeInUpAnimator());
         recyclerView.setAdapter(adapter);
         editText.addTextChangedListener(this);
     }
@@ -68,6 +71,11 @@ public class RecyclerHeaderGridActivity extends AppCompatActivity implements Too
         } else if (item.getItemId() == R.id.asc) {
             if (adapter != null) {
                 adapter.setSort(asc);
+                return true;
+            }
+        }else if (item.getItemId() == R.id.add) {
+            if (adapter != null) {
+                adapter.setAll(Arrays.asList(getResources().getStringArray(R.array.items)));
                 return true;
             }
         }

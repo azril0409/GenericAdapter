@@ -21,6 +21,8 @@ public class NormalHeaderDecoration<E> extends RecyclerView.ItemDecoration {
 
     private boolean mRenderInline;
 
+    private boolean isNoDateHasHeader;
+
     /**
      * @param adapter the sticky header adapter to use
      */
@@ -28,13 +30,15 @@ public class NormalHeaderDecoration<E> extends RecyclerView.ItemDecoration {
         this(adapter, false);
     }
 
-    /**
-     * @param adapter the sticky header adapter to use
-     */
     public NormalHeaderDecoration(StickyHeaderAdapter adapter, boolean renderInline) {
+        this(adapter, renderInline, false);
+    }
+
+    public NormalHeaderDecoration(StickyHeaderAdapter adapter, boolean renderInline, boolean isNoDateHasHeader) {
         mAdapter = adapter;
         mHeaderCache = new HashMap<>();
         mRenderInline = renderInline;
+        this.isNoDateHasHeader = isNoDateHasHeader;
     }
 
     /**
@@ -43,7 +47,6 @@ public class NormalHeaderDecoration<E> extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         int position = parent.getChildAdapterPosition(view);
-
         int headerHeight = 0;
         if (position != RecyclerView.NO_POSITION && hasHeader(parent, position)) {
             View header = getHeader(parent, position).itemView;
@@ -62,19 +65,20 @@ public class NormalHeaderDecoration<E> extends RecyclerView.ItemDecoration {
 
     private boolean hasHeader(RecyclerView parent, int position) {
         if (position == 0) {
-            return true;
+            return parent.getAdapter().getItemViewType(position) == GenericRecyclerAdapter.NODATA ? isNoDateHasHeader : true;
         }
         final RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             final int spanCount = gridLayoutManager.getSpanCount();
+            Log.d("TAG", "spanCount :" + spanCount);
             if (position < spanCount) {
                 return true;
             }
             if (spanCount > 1) {
                 return false;
             }
-            final int previous = position - 1;
+            final int previous = position - spanCount;
             return mAdapter.getHeaderId(position) != mAdapter.getHeaderId(previous);
         } else {
             final int previous = position - 1;
@@ -126,8 +130,6 @@ public class NormalHeaderDecoration<E> extends RecyclerView.ItemDecoration {
             final View child = parent.getChildAt(layoutPos);
 
             final int adapterPos = parent.getChildAdapterPosition(child);
-            Log.d("TAG", "adapterPos = " + adapterPos);
-
             if (adapterPos != RecyclerView.NO_POSITION && (layoutPos == 0 || hasHeader(parent, adapterPos))) {
                 View header = getHeader(parent, adapterPos).itemView;
                 c.save();

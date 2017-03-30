@@ -24,12 +24,13 @@ public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends Gene
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                final int index = indexs.get(position);
-                if (index < 0) {
-                    return spanCount;
-                } else {
-                    return 1;
+                if (manager.getIndexCount() > position) {
+                    final int index = manager.indexs.get(position);
+                    if (index < 0) {
+                        return spanCount;
+                    }
                 }
+                return 1;
             }
         });
         return gridLayoutManager;
@@ -37,8 +38,8 @@ public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends Gene
 
 
     @Override
-    public final int getItemViewType(int position) {
-        final int index = indexs.get(position);
+    public final int onGetItemViewType(int position) {
+        final int index = manager.indexs.get(position);
         if (index >= 0) {
             final int type = getCellViewType(position);
             if (type == HEADER) {
@@ -58,16 +59,14 @@ public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends Gene
         if (viewType == HEADER) {
             return new ViewWrapper(onCreateHeaderViewHolder(parent));
         } else {
-            CellView<E> cellView = onCreateItemView(parent, viewType);
-            cellView.setGenericAdapter(this);
-            return new ViewWrapper(cellView);
+            return super.onCreateViewHolder(parent, viewType);
         }
     }
 
     @Override
     public void onBindViewHolder(ViewWrapper viewWrapper, int position) {
-        if (indexs.size() > position) {
-            final int index = indexs.get(position);
+        if (getItemViewType(position) != NODATA) {
+            final int index = manager.indexs.get(position);
             if (index >= 0) {
                 final E e = getItem(position);
                 viewWrapper.getView().onBindViewHolder(e);
@@ -92,24 +91,24 @@ public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends Gene
     public abstract Header getHeader(long headerId);
 
     @Override
-    public void onRefreshIndexs() {
-        super.onRefreshIndexs();
+    public void refresh() {
+        super.refresh();
         if (headerItems == null) {
             headerItems = new ArrayList<>();
         } else {
             headerItems.clear();
         }
         Integer previous = null;
-        for (int index = 0; index < indexs.size(); index++) {
+        for (int index = 0; index < manager.getIndexCount(); index++) {
             if (previous == null) {
                 headerItems.add(getHeader(getHeaderId(index)));
-                indexs.add(index, -headerItems.size());
+                manager.indexs.add(index, -headerItems.size());
                 index++;
             } else {
                 long id = getHeaderId(index);
                 if (id != getHeaderId(previous)) {
                     headerItems.add(getHeader(id));
-                    indexs.add(index, -headerItems.size());
+                    manager.indexs.add(index, -headerItems.size());
                     index++;
                 }
             }
@@ -119,11 +118,11 @@ public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends Gene
 
     @Override
     public E getItem(int position) {
-        final int index = indexs.get(position);
+        final int index = manager.indexs.get(position);
         if (index < 0) {
             return null;
         } else {
-            return originalItems.get(index);
+            return manager.getItem(position);
         }
     }
 }

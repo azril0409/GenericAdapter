@@ -112,8 +112,7 @@ public class ListActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         }
 
         @Override
-        public void onBind(Tag tag, int position) {
-            final String text = getItem(position);
+        public void onBind(Tag tag, String text) {
             tag.textView.setText(text);
         }
     }
