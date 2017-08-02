@@ -35,13 +35,14 @@ public class ItemManager<E> implements GenericAdapterInterface<E> {
         }
     };
     private Comparator<E> sort;
+    private boolean enable = true;
 
     public ItemManager(Collection<E> originalItems) {
         this.originalItems = new ArrayList<>(originalItems);
     }
 
     public int getItemCount() {
-        if (indexs.isEmpty()) {
+        if (isNoData() && enable) {
             return 1;
         }
         return indexs.size();
@@ -49,6 +50,16 @@ public class ItemManager<E> implements GenericAdapterInterface<E> {
 
     public int getIndexCount() {
         return indexs.size();
+    }
+
+    @Override
+    public boolean isNoData() {
+        return indexs.isEmpty();
+    }
+
+    @Override
+    public void setNoDataViewEnable(boolean enable) {
+        this.enable = enable;
     }
 
     @Override

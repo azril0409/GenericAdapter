@@ -9,9 +9,9 @@ import android.widget.TextView;
  * Created by Deo-chainmeans on 2017/3/26.
  */
 
-public class DefaultNoDateView extends CellView<Object> {
+public class DefaultNoDataView extends CellView<Object> {
 
-    public DefaultNoDateView(Context context) {
+    public DefaultNoDataView(Context context) {
         super(context);
     }
 }

@@ -4,9 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -35,7 +33,7 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
     @Override
     public ViewWrapper onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == NODATA) {
-            final CellView<?> cellView = onCreateNoDateView(parent);
+            final CellView<?> cellView = onCreateNoDataView(parent);
             final ViewWrapper viewWrapper = new ViewWrapper(cellView);
             return viewWrapper;
         } else {
@@ -84,8 +82,8 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
 
     public abstract CellView<?> onCreateItemView(ViewGroup parent, int viewType);
 
-    public CellView<?> onCreateNoDateView(ViewGroup parent) {
-        return new DefaultNoDateView(getContext());
+    public CellView<?> onCreateNoDataView(ViewGroup parent) {
+        return new DefaultNoDataView(getContext());
     }
 
     public boolean getItemClickable(int position) {
@@ -99,45 +97,52 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
 
     @Override
     public final void addAll(Collection<E> items) {
+        beforeRefresh();
         manager.addAll(items);
-        refresh();
+        afterRefresh();
     }
 
     @Override
     public final void setAll(Collection<E> items) {
+        beforeRefresh();
         manager.setAll(items);
-        refresh();
+        afterRefresh();
     }
 
     @Override
     public final void add(E item) {
+        beforeRefresh();
         manager.add(item);
-        refresh();
+        afterRefresh();
     }
 
     @Override
     public final void set(int index, E item) {
+        beforeRefresh();
         manager.set(index, item);
-        refresh();
+        afterRefresh();
     }
 
     @Override
     public final void remove(E item) {
+        beforeRefresh();
         manager.remove(item);
-        refresh();
+        afterRefresh();
     }
 
     @Override
     public final E remove(int position) {
+        beforeRefresh();
         final E e = manager.remove(position);
-        refresh();
+        afterRefresh();
         return e;
     }
 
     @Override
     public final void clear() {
+        beforeRefresh();
         manager.clear();
-        refresh();
+        afterRefresh();
     }
 
     @Override
@@ -152,14 +157,23 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
         refresh();
     }
 
+    private final void beforeRefresh() {
+        if (manager.isNoData()) {
+            notifyItemRemoved(0);
+        } else {
+            notifyItemRangeRemoved(0, manager.getIndexCount());
+        }
+    }
+
+    private final void afterRefresh() {
+        manager.refresh();
+        notifyItemRangeInserted(0, manager.getItemCount());
+    }
+
     @Override
     public void refresh() {
-        if (manager.getIndexCount() == 0) {
-            notifyItemRemoved(0);
-        }
-        notifyItemRangeRemoved(0, manager.getIndexCount());
-        manager.refresh();
-        notifyItemRangeInserted(0, manager.getIndexCount());
+        beforeRefresh();
+        afterRefresh();
     }
 
     @Override
@@ -170,5 +184,16 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
     @Override
     public E getItem(int position) {
         return manager.getItem(position);
+    }
+
+    @Override
+    public boolean isNoData() {
+        return manager.isNoData();
+    }
+
+    @Override
+    public void setNoDataViewEnable(boolean enable) {
+        manager.setNoDataViewEnable(enable);
+        refresh();
     }
 }

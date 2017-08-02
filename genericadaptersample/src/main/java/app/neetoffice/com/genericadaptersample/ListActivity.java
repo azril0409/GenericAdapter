@@ -66,6 +66,16 @@ public class ListActivity extends AppCompatActivity implements Toolbar.OnMenuIte
                 adapter.setSort(asc);
                 return true;
             }
+        }else if (item.getItemId() == R.id.clear) {
+            if (adapter != null) {
+                adapter.clear();
+                return true;
+            }
+        }else if (item.getItemId() == R.id.add) {
+            if (adapter != null) {
+                adapter.setAll(Arrays.asList(getResources().getStringArray(R.array.items)));
+                return true;
+            }
         }
         return false;
     }

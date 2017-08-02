@@ -114,6 +114,17 @@ public abstract class GenericAdapter<E, T> extends BaseAdapter implements Generi
     }
 
     @Override
+    public boolean isNoData() {
+        return manager.isNoData();
+    }
+
+    @Override
+    public void setNoDataViewEnable(boolean enable) {
+        manager.setNoDataViewEnable(enable);
+        refresh();
+    }
+
+    @Override
     public long getItemId(int position) {
         return position;
     }
@@ -123,7 +134,7 @@ public abstract class GenericAdapter<E, T> extends BaseAdapter implements Generi
         T t = null;
         E e = getItem(position);
         if (e == null) {
-            convertView = onCreateNoDateView(parent);
+            convertView = onCreateNoDataView(parent);
         } else if (convertView != null && convertView.getTag() != null) {
             t = (T) convertView.getTag();
         } else {
@@ -137,7 +148,7 @@ public abstract class GenericAdapter<E, T> extends BaseAdapter implements Generi
         return convertView;
     }
 
-    public View onCreateNoDateView(ViewGroup parent) {
+    public View onCreateNoDataView(ViewGroup parent) {
         return new View(getContext());
     }
 

@@ -32,4 +32,8 @@ public interface GenericAdapterInterface<E> {
     List<E> getItems();
 
     E getItem(int position);
+
+    boolean isNoData();
+
+    void setNoDataViewEnable(boolean enable);
 }

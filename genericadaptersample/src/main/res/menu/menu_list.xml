@@ -11,6 +11,10 @@
         android:title="逆序"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/clear"
+        android:title="清除"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/add"
         android:title="加入"
         app:showAsAction="ifRoom" />
