@@ -22,11 +22,14 @@ public abstract class GenericAdapter<E, T> extends BaseAdapter implements Generi
     private final int layoutId;
     private final ItemManager<E> manager;
 
+    public GenericAdapter(Context context, int layoutId) {
+        this(context, new ArrayList<E>(), layoutId);
+    }
+
     public GenericAdapter(Context context, Collection<E> items, int layoutId) {
         this.context = context;
         this.layoutId = layoutId;
         manager = new ItemManager<E>(items);
-        refresh();
     }
 
     public final Context getContext() {

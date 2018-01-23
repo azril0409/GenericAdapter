@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.3'
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 14
@@ -15,16 +15,16 @@ android {
         }
     }
 }
-def libname = 'GenericRecyclerAdapter_111.jar'
+def name = 'GenericRecyclerAdapter_112.jar'
+def toPath = '../librarys/'
 task clearAar(type: Delete) {
-    delete '../librarys/genericrecycleradapter/'
+    delete toPath+'/'+name
 }
 task makeAar(type: Copy) {
     from('build/intermediates/bundles/release/')
-    into('../librarys/genericrecycleradapter')
+    into(toPath)
     include('classes.jar')
-    include('jni/**')
-    rename('classes.jar', libname)
+    rename('classes.jar', name)
 }
 makeAar.dependsOn(clearAar, build)
 

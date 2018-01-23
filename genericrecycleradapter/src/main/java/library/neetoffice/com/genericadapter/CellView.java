@@ -17,6 +17,19 @@ public abstract class CellView<E> extends FrameLayout {
     final boolean recyclable;
     protected E data;
     private GenericAdapterInterface<E> genericAdapter;
+    private OnClickListener clickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onItemClick(v, data);
+        }
+    };
+    private OnLongClickListener longClickListener = new OnLongClickListener() {
+
+        @Override
+        public boolean onLongClick(View v) {
+            return CellView.this.onLongClick(v, data);
+        }
+    };
 
     public CellView(Context context) {
         super(context);
@@ -36,13 +49,19 @@ public abstract class CellView<E> extends FrameLayout {
 
     public void onItemClickable(boolean clickable) {
         if (clickable) {
-            setOnClickListener(new Listener(data));
+            setOnClickListener(clickListener);
+            setOnLongClickListener(longClickListener);
         } else {
             setOnClickListener(null);
+            setOnLongClickListener(null);
         }
     }
 
     public void onItemClick(View cellView, E data) {
+    }
+
+    public boolean onLongClick(View v, E data) {
+        return true;
     }
 
     public final GenericAdapterInterface<E> getGenericAdapter() {
@@ -74,18 +93,5 @@ public abstract class CellView<E> extends FrameLayout {
 
     public final boolean isRecyclable() {
         return recyclable;
-    }
-
-    private class Listener implements OnClickListener {
-        private E data;
-
-        private Listener(E data) {
-            this.data = data;
-        }
-
-        @Override
-        public void onClick(View v) {
-            onItemClick(v, data);
-        }
     }
 }

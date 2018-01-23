@@ -15,6 +15,10 @@ public abstract class GenericStickyHeaderRecyclerAdapter<E, Header> extends Gene
     protected static final int ITEM = 0;
     private ArrayList<Header> headerItems = new ArrayList<>();
 
+    public GenericStickyHeaderRecyclerAdapter(Context context) {
+        super(context);
+    }
+
     public GenericStickyHeaderRecyclerAdapter(Context context, Collection<E> items) {
         super(context, items);
     }

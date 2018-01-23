@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -20,10 +21,13 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
     private final Context context;
     protected final ItemManager<E> manager;
 
+    public GenericRecyclerAdapter(Context context) {
+        this(context, new ArrayList<E>());
+    }
+
     public GenericRecyclerAdapter(Context context, Collection<E> items) {
         this.context = context;
         manager = new ItemManager<E>(items);
-        refresh();
     }
 
     public final Context getContext() {

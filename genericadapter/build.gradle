@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 android {
     compileSdkVersion 24
-    buildToolsVersion '24.0.3'
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 9
@@ -15,16 +15,16 @@ android {
         }
     }
 }
-def libname = 'GenericAdapter_111.jar'
+def name = 'GenericAdapter_112.jar'
+def toPath = '../librarys/'
 task clearAar(type: Delete) {
-    delete '../librarys/genericadapter/'
+    delete toPath+'/'+name
 }
 task makeAar(type: Copy) {
     from('build/intermediates/bundles/release/')
-    into('../librarys/genericadapter')
+    into(toPath)
     include('classes.jar')
-    include('jni/**')
-    rename('classes.jar', libname)
+    rename('classes.jar', name)
 }
 makeAar.dependsOn(clearAar, build)
 
