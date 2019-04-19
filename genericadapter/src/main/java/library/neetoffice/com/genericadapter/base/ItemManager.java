@@ -39,6 +39,7 @@ public class ItemManager<E> implements GenericAdapterInterface<E> {
 
     public ItemManager(Collection<E> originalItems) {
         this.originalItems = new ArrayList<>(originalItems);
+        refresh();
     }
 
     public int getItemCount() {

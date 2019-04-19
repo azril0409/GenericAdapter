@@ -1,7 +1,8 @@
 package library.neetoffice.com.genericadapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Deo on 2015/12/7.

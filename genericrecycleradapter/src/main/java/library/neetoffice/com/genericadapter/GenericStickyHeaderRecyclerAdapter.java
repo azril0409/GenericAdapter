@@ -1,11 +1,12 @@
 package library.neetoffice.com.genericadapter;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import androidx.recyclerview.widget.GridLayoutManager;
 
 /**
  * Created by Deo on 2016/3/17.

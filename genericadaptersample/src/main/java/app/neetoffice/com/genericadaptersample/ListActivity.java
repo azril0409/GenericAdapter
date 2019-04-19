@@ -2,8 +2,7 @@ package app.neetoffice.com.genericadaptersample;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -16,6 +15,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import library.neetoffice.com.genericadapter.base.Filter;
 import library.neetoffice.com.genericadapter.base.GenericAdapter;
 
@@ -43,7 +44,7 @@ public class ListActivity extends AppCompatActivity implements Toolbar.OnMenuIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         EditText editText = (EditText) findViewById(R.id.editText);
         ListView listView = (ListView) findViewById(R.id.listView);
         toolbar.inflateMenu(R.menu.menu_list);

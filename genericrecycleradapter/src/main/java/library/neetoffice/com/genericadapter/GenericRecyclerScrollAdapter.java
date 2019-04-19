@@ -1,7 +1,7 @@
 package library.neetoffice.com.genericadapter;
 
-import android.support.v7.widget.RecyclerView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import library.neetoffice.com.genericadapter.base.OnScrollCallBack;
 
 /**

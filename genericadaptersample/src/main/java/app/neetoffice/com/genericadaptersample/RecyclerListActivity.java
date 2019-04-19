@@ -3,16 +3,11 @@ package app.neetoffice.com.genericadaptersample;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,6 +16,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 import library.neetoffice.com.genericadapter.NormalHeaderDecoration;
 import library.neetoffice.com.genericadapter.StickyHeaderAdapter;

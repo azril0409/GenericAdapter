@@ -1,11 +1,16 @@
 package library.neetoffice.com.genericadapter;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
+import android.os.Build;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.StringRes;
 import library.neetoffice.com.genericadapter.base.GenericAdapterInterface;
 
 /**
@@ -37,11 +42,32 @@ public abstract class CellView<E> extends FrameLayout {
         recyclable = true;
     }
 
+    public CellView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        setLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        recyclable = true;
+    }
+
+    public CellView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        setLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        recyclable = true;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public CellView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        setLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        recyclable = true;
+    }
+
     public CellView(Context context, boolean recyclable) {
         super(context);
         setLayoutParams(WRAP_CONTENT, WRAP_CONTENT);
         this.recyclable = recyclable;
     }
+
+
 
     public void setLayoutParams(int width, int height) {
         setLayoutParams(new ViewGroup.LayoutParams(width, height));

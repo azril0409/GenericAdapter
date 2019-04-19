@@ -1,7 +1,6 @@
 package library.neetoffice.com.genericadapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import library.neetoffice.com.genericadapter.base.Filter;
 import library.neetoffice.com.genericadapter.base.GenericAdapterInterface;
 import library.neetoffice.com.genericadapter.base.ItemManager;
