@@ -59,6 +59,12 @@ public abstract class GenericAdapter<E, T> extends BaseAdapter implements Generi
     }
 
     @Override
+    public void add(int index, E item) {
+        manager.add(index, item);
+        refresh();
+    }
+
+    @Override
     public final void set(int index, E item) {
         manager.set(index, item);
         refresh();

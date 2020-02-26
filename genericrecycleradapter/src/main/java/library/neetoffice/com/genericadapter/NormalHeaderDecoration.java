@@ -72,12 +72,8 @@ public class NormalHeaderDecoration<E> extends RecyclerView.ItemDecoration {
         if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             final int spanCount = gridLayoutManager.getSpanCount();
-            Log.d("TAG", "spanCount :" + spanCount);
             if (position < spanCount) {
                 return true;
-            }
-            if (spanCount > 1) {
-                return false;
             }
             final int previous = position - spanCount;
             return mAdapter.getHeaderId(position) != mAdapter.getHeaderId(previous);
@@ -131,7 +127,7 @@ public class NormalHeaderDecoration<E> extends RecyclerView.ItemDecoration {
             final View child = parent.getChildAt(layoutPos);
 
             final int adapterPos = parent.getChildAdapterPosition(child);
-            if (adapterPos != RecyclerView.NO_POSITION && (layoutPos == 0 || hasHeader(parent, adapterPos))) {
+            if (adapterPos != RecyclerView.NO_POSITION && ( hasHeader(parent, adapterPos))) {
                 View header = getHeader(parent, adapterPos).itemView;
                 c.save();
                 final int left = 0;//child.getLeft();

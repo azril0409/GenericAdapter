@@ -15,7 +15,7 @@ android {
         }
     }
 }
-def name = 'GenericAdapter_200.aar'
+def name = 'GenericAdapter_202.aar'
 def toPath = '../librarys/'
 task clearAar(type: Delete) {
     delete toPath+'/'+name
@@ -30,3 +30,8 @@ makeAar.dependsOn(clearAar, build)
 
 dependencies {
 }
+
+
+apply from: rootProject.file('genericadapter/publish.gradle')
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

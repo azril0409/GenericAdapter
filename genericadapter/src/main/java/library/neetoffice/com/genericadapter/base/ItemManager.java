@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -93,6 +94,15 @@ public class ItemManager<E> implements GenericAdapterInterface<E> {
     }
 
     @Override
+    public void add(int index, E item) {
+        try {
+            originalItems.add(index, item);
+        } catch (Exception e) {
+        } finally {
+        }
+    }
+
+    @Override
     public void set(int index, E item) {
         try {
             originalItems.set(index, item);
@@ -104,7 +114,14 @@ public class ItemManager<E> implements GenericAdapterInterface<E> {
     @Override
     public void remove(E item) {
         try {
-            originalItems.remove(item);
+            final Iterator<E> iterator = originalItems.iterator();
+            while (iterator.hasNext()) {
+                final E e = iterator.next();
+                if (item == e) {
+                    iterator.remove();
+                    break;
+                }
+            }
         } catch (Exception e) {
         } finally {
         }
@@ -113,8 +130,18 @@ public class ItemManager<E> implements GenericAdapterInterface<E> {
     @Override
     public E remove(int position) {
         try {
-            E e = originalItems.remove(position);
-            return e;
+            if (originalItems.size() > position) {
+                final E e1 = originalItems.get(position);
+                final Iterator<E> iterator = originalItems.iterator();
+                while (iterator.hasNext()) {
+                    final E e2 = iterator.next();
+                    if (e1 == e2) {
+                        iterator.remove();
+                        break;
+                    }
+                }
+                return e1;
+            }
         } catch (Exception e) {
         } finally {
         }

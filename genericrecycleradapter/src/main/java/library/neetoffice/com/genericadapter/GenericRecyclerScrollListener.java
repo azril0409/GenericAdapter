@@ -2,6 +2,7 @@ package library.neetoffice.com.genericadapter;
 
 
 import androidx.recyclerview.widget.RecyclerView;
+
 import library.neetoffice.com.genericadapter.base.OnScrollCallBack;
 
 /**
@@ -17,7 +18,7 @@ class GenericRecyclerScrollListener extends RecyclerView.OnScrollListener {
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
-        if (newState == RecyclerView.SCROLL_STATE_IDLE && !recyclerView.canScrollHorizontally(1)) {
+        if (newState == RecyclerView.SCROLL_STATE_IDLE && !recyclerView.canScrollHorizontally(1) && !recyclerView.canScrollVertically(1)) {
             if (callBack != null) {
                 callBack.onScrollEnd();
             }

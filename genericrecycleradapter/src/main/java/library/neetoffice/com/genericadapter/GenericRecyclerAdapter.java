@@ -121,6 +121,13 @@ public abstract class GenericRecyclerAdapter<E> extends RecyclerView.Adapter<Vie
     }
 
     @Override
+    public final void add(int index, E item) {
+        beforeRefresh();
+        manager.add(index, item);
+        afterRefresh();
+    }
+
+    @Override
     public final void set(int index, E item) {
         beforeRefresh();
         manager.set(index, item);

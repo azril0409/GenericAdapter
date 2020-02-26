@@ -11,6 +11,6 @@ public class RecyclerGridActivity extends RecyclerListActivity {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
-        return new GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false);
+        return new GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false);
     }
 }

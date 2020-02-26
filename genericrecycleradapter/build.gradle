@@ -14,7 +14,7 @@ android {
         }
     }
 }
-def name = 'GenericRecyclerAdapter_200.aar'
+def name = 'GenericRecyclerAdapter_202.aar'
 def toPath = '../librarys/'
 task clearAar(type: Delete) {
     delete toPath+'/'+name
@@ -31,3 +31,8 @@ dependencies {
     implementation project(':genericadapter')
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }
+
+
+apply from: rootProject.file('genericrecycleradapter/publish.gradle')
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'

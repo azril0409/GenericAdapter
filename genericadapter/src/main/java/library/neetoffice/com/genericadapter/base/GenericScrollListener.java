@@ -23,6 +23,7 @@ class GenericScrollListener implements AbsListView.OnScrollListener {
     }
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+
         if (scrollState == GenericScrollListener.SCROLL_STATE_IDLE & (firstVisibleItem + visibleItemCount + 1 >= totalItemCount)) {
             callBack.onScrollEnd();
         }

@@ -1,0 +1,19 @@
+ext {
+    publishedGroupId = 'library.neetoffice.com.adapters'
+    artifact = 'genericadapter'
+    libraryName = 'genericadapter'
+    libraryDescription = ''
+    siteUrl = 'https://github.com/azril0409/GenericAdapter'
+    gitUrl = 'https://github.com/azril0409/GenericAdapter.git'
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    developerId = 'azril0409'
+    developerName = 'TU TSUNG-TSE'
+    developerEmail = 'azril0409@gmail.com'
+
+    libraryVersion = '1.0.0'
+    bintrayRepo = 'maven'
+    bintrayName = 'GenericAdapter'
+    libraryDescription = ''
+    allLicenses = ["Apache-2.0"]
+}

@@ -15,6 +15,9 @@ public interface GenericAdapterInterface<E> {
 
     void add(E item);
 
+    void add(int index, E item);
+
+
     void set(int index, E item);
 
     void remove(E item);
