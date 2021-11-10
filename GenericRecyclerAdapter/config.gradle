@@ -1,8 +1,8 @@
 ext {
-    publishedGroupId = 'library.neetoffice.com.adapters'
-    artifact = 'genericrecycleradapter'
-    libraryName = 'genericrecycleradapter'
-    libraryDescription = ''
+    groupId = 'io.github.azril0409'
+    libraryName = 'GenericRecyclerAdapter'
+    libraryVersion = '1.0.0'
+    libraryDescription = 'GenericRecyclerAdapter is an open source annotation framework for Android. It takes care of the Adapter of RecyclerView.'
     siteUrl = 'https://github.com/azril0409/GenericAdapter'
     gitUrl = 'https://github.com/azril0409/GenericAdapter.git'
     licenseName = 'The Apache Software License, Version 2.0'
@@ -10,10 +10,4 @@ ext {
     developerId = 'azril0409'
     developerName = 'TU TSUNG-TSE'
     developerEmail = 'azril0409@gmail.com'
-
-    libraryVersion = '1.0.0'
-    bintrayRepo = 'maven'
-    bintrayName = 'GenericRecyclerAdapter'
-    libraryDescription = ''
-    allLicenses = ["Apache-2.0"]
 }

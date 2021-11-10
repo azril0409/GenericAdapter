@@ -1,0 +1,106 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+group = groupId
+version = libraryVersion
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+task clearAar(type: Delete) {
+    delete '../librarys/' + libraryName + '_' + libraryVersion + '.aar'
+}
+task makeAar(type: Copy) {
+    from('build/outputs/aar/')
+    into('../librarys/')
+    include(libraryName + '-release.aar')
+    rename(libraryName + '-release.aar', libraryName + '_' + libraryVersion + '.aar')
+}
+makeAar.dependsOn(clearAar, build)
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all { variant ->
+        if (variant.name == 'release') {
+            owner.classpath += variant.javaCompile.classpath
+        }
+    }
+    source = android.sourceSets.main.java.srcDirs
+    exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    useInMemoryPgpKeys(
+            properties.getProperty("signing.keyId"),
+            properties.getProperty("signing.key"),
+            properties.getProperty("signing.password")
+    )
+    sign publishing.publications
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId groupId
+                artifactId libraryName
+                version libraryVersion
+
+                artifact sourcesJar
+
+                pom {
+                    name = libraryName
+                    description = libraryDescription
+                    url = siteUrl
+                    licenses {
+                        license {
+                            name = licenseName
+                            url = licenseUrl
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = developerId
+                            name = developerName
+                            email = developerEmail
+                        }
+                    }
+                    scm {
+                        connection = gitUrl
+                        developerConnection = gitUrl
+                        url = siteUrl
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                //上傳到 sonatype 的 nexus repository manager 代為 push 到 maven central
+                name = "sonatype"
+                def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                def name = properties.getProperty("ossrhUsername") ?: ''
+                def pw = properties.getProperty("ossrhPassword") ?: ''
+                credentials {
+                    username name
+                    password pw
+                }
+            }
+        }
+    }
+}

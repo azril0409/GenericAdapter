@@ -1,1 +1,1 @@
-include ':genericadapter', ':genericrecycleradapter', ':genericadaptersample'
+include ':GenericAdapter', ':GenericRecyclerAdapter', ':GenericAdapterSample'
