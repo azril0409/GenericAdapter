@@ -1,7 +1,7 @@
 ext {
     groupId = 'io.github.azril0409'
     libraryName = 'GenericAdapter'
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
     libraryDescription = 'GenericAdapter is an open source annotation framework for Android. It takes care of the Adapter of List.'
     siteUrl = 'https://github.com/azril0409/GenericAdapter'
     gitUrl = 'https://github.com/azril0409/GenericAdapter.git'

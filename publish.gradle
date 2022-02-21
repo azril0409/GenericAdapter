@@ -60,7 +60,9 @@ afterEvaluate {
                 artifactId libraryName
                 version libraryVersion
 
+                artifact bundleReleaseAar
                 artifact sourcesJar
+                artifact javadocJar
 
                 pom {
                     name = libraryName
